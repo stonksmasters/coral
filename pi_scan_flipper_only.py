@@ -6,7 +6,7 @@ import os
 import time
 
 # Define the Flipper Zero's BLE MAC address
-FLIPPER_MAC_ADDRESS = "80:E1:27:B5:B6:D0"  # <-- Update with your Flipper Zero's MAC address
+FLIPPER_MAC_ADDRESS = "FF:EE:DD:CC:BB:AA"  # <-- Update with your Flipper Zero's MAC address
 
 CSV_FILE = "rssi_flipper_data.csv"
 
