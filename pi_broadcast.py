@@ -1,22 +1,28 @@
 # pi_broadcast.py
-import asyncio
-from bleak import BleakServer
+import subprocess
+import time
 
-# Define the BLE advertisement parameters
-DEVICE_NAME = "RaspberryPi_Beacon"
-
-async def run():
-    server = BleakServer()
-    await server.start_advertising(name=DEVICE_NAME)
-    print(f"BLE beacon '{DEVICE_NAME}' is now advertising.")
-    try:
-        while True:
-            await asyncio.sleep(1)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        await server.stop_advertising()
-        print("BLE advertising stopped.")
+def start_ble_advertising():
+    # Start bluetoothctl and send commands
+    proc = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    commands = [
+        'power on\n',
+        'agent on\n',
+        'default-agent\n',
+        'advertise on\n',
+        'discoverable on\n',
+        'exit\n'
+    ]
+    for cmd in commands:
+        proc.stdin.write(cmd)
+        proc.stdin.flush()
+        time.sleep(0.5)  # Wait for the command to take effect
 
 if __name__ == "__main__":
-    asyncio.run(run())
+    start_ble_advertising()
+    print("BLE advertising started.")
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("BLE advertising stopped.")
